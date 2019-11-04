@@ -1,0 +1,392 @@
+/* header */
+.page-header{
+	padding: 50px 0px 30px 0px;
+}
+nav{
+	display: flex;
+	justify-content: space-between;
+}
+.gnav__menu{
+	list-style-type: none;
+	display: flex;
+	align-items: center;
+}
+.gnav__menu__item{
+	padding-left: 10px;
+}
+/* header */
+
+
+
+/* body */
+
+/* base.html */
+a{
+	color: black ;
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: none;
+	filter: alpha(opacity=70);
+	opacity: 0.7; 
+	color: black ;
+}
+
+p{
+	letter-spacing: 2.5px;
+	margin:0px;
+}
+
+*{
+	font-weight:500;
+	font-family: "Avenir", YuGothic, 'Yu Gothic',  sans-serif ;
+}
+
+.site-content{
+	width:980px;
+	margin:auto;
+}
+
+/* base.html */
+
+/* contact.html */
+
+.contact h2{
+  margin:40px 0;
+}
+
+/* contact.html */
+
+/* privacy_policy.html */
+
+.privacy_policy h2{
+	margin-top:50px;
+}
+
+.privacy_policy h3{
+	margin-top:50px;
+}
+
+.privacy_policy p{
+	line-height:2;
+}
+
+.privacy_policy ul{
+	padding:0px;
+}
+
+.privacy_policy li{
+	list-style-type:none;
+	padding: 10px 0 0 25px;
+	position:relative;
+}
+
+.privacy_policy ul li:before {
+    content: "・";
+    position: absolute;
+    left: 0;
+}
+
+
+/* privacy_policy.html */
+
+
+/* home.html */
+.ephemera{
+	display: flex;
+	flex-direction:row-reverse;
+}
+.ephemera__side{
+	width: 30%;
+	padding-right:50px;
+}
+.ephemera__side__domain{
+	margin-top:50px;
+}
+.ephemera__side__title{
+	font-size: 20px;
+	margin-bottom: 20px;
+	font-weight: 600;
+}
+.ephemera__side__link{
+	word-break: break-all;
+	margin-bottom: 15px;
+	line-height: 1.5;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.ephemera__side__edit{
+	margin-bottom:20px;
+}
+.ephemera__main{
+	width: 70%;
+}
+
+.ephemera__search{
+
+	margin-bottom:30px;
+}
+
+.ephemera__search form{
+	width: 100%;
+	position:relative;
+	height: 50px;
+	max-width:100%;	
+}
+#ephemera__search__input{
+	height:50px;
+	padding:0 10px; 
+	position:absolute; 
+	left:0;
+	top:0; 
+	border-radius:5px;
+	outline:0;
+	background:#fff;	
+	width: 100%;
+	border: 1px solid #bfbfbf;
+}
+#search_form_button{
+	height:50px;
+	position:absolute; 
+	right: 10px;/*アイコン左右の位置調整*/
+	top:0;
+	background:none;
+	color:#666;
+	border:none;
+	font-size:20px;/*アイコンサイズ*/
+}
+.ephemera__search__order{
+	display: flex;
+	margin-top: 10px;
+}
+.ephemera__search__order p{
+	margin-right: 20px;
+	font-size: 12px;
+}
+.ephemera__main__item{
+	margin-bottom: 50px;
+	position: relative;
+}
+.ephemera__main__item:hover{
+	cursor:pointer;
+}
+.ephemera__main__item__icon{
+	width: 16px;
+	height: auto;
+}
+.ephemera__main__item__url{
+	font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80%;
+    margin-left: 4px;
+}
+.ephemera__main__item__url a{
+	color:#1a0dab;
+}
+.ephemera__main__item__message{
+	font-size: 16px;
+	margin-top: 10px;
+	margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80%;
+}
+.ephemera__main__item__detail{
+	width: 100%;
+	padding-top: 20px; 
+	display: none;
+	margin-left: 20px;
+}
+.ephemera__main__item__detail__title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80%;
+}
+.ephemera__main__item__detail__url{
+	font-size: 12px;
+	color: #a5a5a5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80%;
+}
+.ephemera__main__item__detail__image{
+	width: 50%;
+	margin-top: 5px;
+	text-align: center;
+	display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.ephemera__main__item__detail__image img{
+	width: 100%;
+}
+.ephemera__main__item__detail__open{
+	width: 8px;
+    height: 8px;
+    border-top: 2px solid #000 ;
+    border-right: 2px solid #000 ;
+    transform: rotate(135deg);
+    margin-bottom:10.5px ;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.ephemera__main__item__detail__open.close{
+	width: 8px;
+    height: 8px;
+    border-top: 2px solid #000 !important;
+    border-right: 2px solid #000 !important;
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 10px;
+    right: 10px;	
+}
+.ephemera__main__item__detail__open:hover{
+	cursor: pointer;
+}
+#ep_url,
+#ep_message{
+    border: 0.5px solid #bfbfbf;
+    border-radius: 10px;
+    padding: 5px 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+#ep_url:focus,
+#ep_message:focus{
+	box-shadow: none;
+	outline: 0;
+}
+.modalArea {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.modalBg {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30,30,30,0.9);
+}
+.modalWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform:translate(-50%,-50%);
+  width: 70%;
+  max-width: 500px;
+  padding: 30px 30px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+#confirmModal{
+	display: none;
+	z-index: 100;
+}
+.confirmmodalWrapper {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform:translate(-50%,-50%);
+  width: 70%;
+  max-width: 500px;
+  padding: 30px 30px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+.confirmModalbutton{
+	margin-top: 20px;
+	display: flex;
+}
+#closeModal{
+	margin-right: 10px;
+}
+/* home.html */
+
+/* mylist.html */
+
+.mylist{
+	margin-bottom:50px;
+}
+
+.mylist__label{
+	font-weight:bold;
+	margin:0 0 40px 0;
+}
+
+.mylist__ephemera{
+	display:flex;
+	border-bottom: 1px solid #bfbfbf;
+	padding: 20px 0px;
+}
+
+.mylist__ephemera__title{
+	width:30%;
+}
+
+.mylist__ephemera__url{
+	width:70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* mylist.html */
+
+/* mylist_edit */
+
+.mylist_edit__change{
+	display:flex;
+}
+
+.mylist_edit__change p{
+	margin-left:10px;
+}
+
+.mylist_edit__delete__confirm{
+	display:flex;
+	margin-top:20px;
+}
+.mylist_edit__delete__confirm form{
+	margin-right:10px;
+}
+
+/* mylist_edit */
+
+
+/* body */
+
+
+
+/* footer */
+.page-footer{
+	padding: 20px;
+	margin-top:50px;
+}
+
+.page-footer__items{
+	display:flex;
+	justify-content:center;
+}
+
+.page-footer__items p{
+	margin:0 10px;
+	font-size:12px;
+}
+
+.copyright{
+	text-align: center;
+	padding: 20px;
+}
+/* footer */
+

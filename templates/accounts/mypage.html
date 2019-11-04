@@ -1,0 +1,119 @@
+{% extends 'ephemeral/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="/static/css/accounts.css">
+{% endblock %}
+
+{% block content %}
+<div class="mypage">
+
+  <div class="mypage__profile__detail">
+	  <h2>マイページ</h2>
+  	  <div class="row">
+  	  	{% for ephemera in my_ephemeral_list %}
+	        <div class="col-md-4">
+	  	  		<a href="{{ ephemera.url }}">
+		          <div class="card mb-4 shadow-sm">
+		            <img src="{{ ephemera.site_img }}" class=" mypage__profile__detail__ephemera__img">
+		            <div class="card-body">
+		              <p class="card-text">{{ ephemera.url }}</p>
+		              <div class="d-flex justify-content-between align-items-center" id="mypage__profile__detail__ephemera__message">
+		              	<p class="card-text">{{ ephemera.message }}</p>
+		                <div><a href="{% url 'ephemeral:mylist_edit' pk=ephemera.id %}" class="btn btn-outline-primary">編集</a></div>
+		              </div>
+		            </div>
+		          </div>
+		    	</a>	
+	        </div>
+	    {% endfor %}
+	    {% if not my_ephemeral_list.has_next %}
+	    <div class="col-md-4">
+	    	<div class="card mb-4 shadow-sm">
+	    		<img src="{% static 'ephemera/default.png' %}" class="mypage__profile__detail__ephemera__img">
+	    		<div class="card-body">
+		        	<p class="card-text">https://example.com</p>
+		  	  		<div class="d-flex justify-content-between align-items-center" id="mypage__profile__detail__ephemera__new">
+		        		<p class="card-text">メモ</p>
+		  	  			<div><button class="btn btn-primary" id="openModal" >追加</button></div>
+						</div>
+						<div id="modalArea" class="modalArea">
+							<div id="modalBg" class="modalBg"></div>
+							<div id="modalWrapper" class="modalWrapper">
+								<form id="ajax-add-post" action="{% url 'ephemeral:home' %}" method="post">
+									{% csrf_token %}
+									<input type="text" id="ep_url" placeholder="https://" name="ep_url" required>
+									<input type="text" id="ep_message" placeholder="メモ" name="ep_message">
+									<button type="submit" id="modalsubmit" class="btn btn-primary" style="width: auto;">投稿</button>
+								</form>
+							</div>
+							<div id="confirmModal">
+								<div class="confirmmodalWrapper">
+									<p>投稿を取り消しますか？</p>
+									<div class="confirmModalbutton">
+										<div id="closeModal"><button class="btn btn-outline-primary">はい</button></div>
+										<div id="canselcloseModal"><button class="btn btn-outline-danger">いいえ</button></div>
+									</div>
+								</div>
+							</div>
+						</div>
+		  	  		</div>
+		  	  	</div>
+	  	  	</div>
+        </div>
+	    {% endif %}
+      </div>
+	  <ul class="pagination">
+		    <!-- 前へ の部分 -->
+		    {% if my_ephemeral_list.has_previous %}
+		        <li class="page-item">
+		        	<a class="page-link" href="?my_list={{ my_ephemeral_list.previous_page_number }}"><span aria-hidden="true">&laquo;</span></a>
+		        </li>
+		    {% endif %}
+
+		    <!-- 数字の部分 -->
+		    {% for num in my_ephemeral_list.paginator.page_range %}
+		    	{% if num <= my_ephemeral_list.number|add:5 and num >= my_ephemeral_list.number|add:-5 %}
+			        {% if my_ephemeral_list.number == num %}
+			            <li class="page-item active">
+			            	<a class="page-link" href="#!">{{ num }}</a>
+			            </li>
+			        {% else %}
+			            <li class="page-item">
+			            	<a class="page-link" href="?my_list={{ num }}">{{ num }}</a>
+			            </li>
+			        {% endif %}
+			    {% endif %}
+		    {% endfor %}
+
+		    <!-- 次へ の部分 -->
+		    {% if my_ephemeral_list.has_next %}
+		        <li class="page-item">
+		        	<a class="page-link" href="?my_list={{ my_ephemeral_list.next_page_number }}"><span aria-hidden="true">&raquo;</span></a>
+		        </li>
+		    {% endif %}
+	  </ul>
+      <p><a href="{% url 'accounts:password_change' %}">パスワードの変更</p></a>
+  	  <p><a href="{% url 'accounts:logout' %}">ログアウト</p></a>
+  </div>
+</div>
+{% endblock %}
+{% block extrajs %}
+	<script>
+		$(function () {
+			$('#openModal').click(function(){
+			$('#modalArea').fadeIn();
+			});
+			$('#modalBg').click(function(){
+			$('#confirmModal').fadeIn();
+			});
+			$('#closeModal').click(function(){
+				$('#confirmModal').fadeOut();
+			$('#modalArea').fadeOut();
+			});
+			$('#canselcloseModal').click(function(){
+				$('#confirmModal').fadeOut();
+			});
+		});
+	</script>
+{% endblock %}

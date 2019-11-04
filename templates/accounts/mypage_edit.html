@@ -1,0 +1,16 @@
+{% extends 'ephemeral/base.html' %}
+
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="/static/css/accounts.css">
+{% endblock %}
+
+{% block content %}
+  <h2>{{ user.username }}のページ</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% include 'ephemeral/form.html' %}
+    <button type="submit" value="Upload">投稿</button>
+    </form>
+  
+{% endblock %}

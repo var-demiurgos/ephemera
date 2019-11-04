@@ -1,0 +1,211 @@
+{% extends "ephemeral/base.html" %}
+{% block content %}
+	{% load static %}
+
+	<div class="ephemera">
+		<div class="ephemera__main" id="posts">
+			<div class="ephemera__search">
+				<form action="{% url 'ephemeral:search' %}" method="get">
+					<input type="text" name="word" id="ephemera__search__input" required>
+					<button type="submit" id="search_form_button"><i class="fas fa-search"></i></button>
+				</form>
+				<div class="ephemera__search__order">	
+					<p><a href="{% url 'ephemeral:home' %}" {% if key_word == "" %}style="font-weight:bold;"{% endif %}>投稿回数の多い順</a></p>
+					<p><a href="{% url 'ephemeral:search' %}?word=new_ephemera" {% if key_word == "new_ephemera" %}style="font-weight:bold;"{% endif %}>新着順</a></p>
+					<p><a href="{% url 'ephemeral:search' %}?word=ephemerandom" {% if key_word == "ephemerandom" %}style="font-weight:bold;"{% endif %}>ランダム</a></p>
+					<p><a href="{% url 'ephemeral:search' %}?word=random_user" {% if key_word == "random_user" %}style="font-weight:bold;"{% endif %}>ランダムユーザー</a></p>
+				</div>
+			</div>
+			<p {% if error_message|length > 1 %} class="alert alert-primary" role="alert"{% endif %}>{{ error_message }}</p>
+			{% for ephemeral in ephemeral_list %}
+				<div class="ephemera__main__item">
+					
+					<div style="display: flex; align-items: center;">
+						{% if 'ephemera/default' in ephemeral.ephemera_set.first.site_icon %}
+							<img src="{% static ephemeral.ephemera_set.first.site_icon %}" class="ephemera__main__item__icon">
+						{% else %}
+							<img src="{{ ephemeral.ephemera_set.first.site_icon }}" class="ephemera__main__item__icon">
+						{% endif %}
+						<p class="ephemera__main__item__url"><a href="{{ ephemeral.ephemera_set.first.site_url }}" target="_blank">{{ ephemeral.ephemera_set.first.url }}</a></p>
+					</div>
+					<p class="ephemera__main__item__message">{{ ephemeral.ephemera_set.first.message }}</p>
+					<div class="ephemera__main__item__detail">
+						<p class="ephemera__main__item__detail__title">{{ ephemeral.ephemera_set.first.site_title }}</p>
+						<p class="ephemera__main__item__detail__url">{{ ephemeral }}</p>
+						<div class="ephemera__main__item__detail__image">
+							{% if 'ephemera/default' in ephemeral.ephemera_set.first.site_img %}
+								<img src="{% static ephemeral.ephemera_set.first.site_img %}">
+							{% else %}
+								<img src="{{ ephemeral.ephemera_set.first.site_img }}">
+							{% endif %}
+							<div>
+								{% if user.is_authenticated %}
+									{% if ephemeral.ephemera_set.first.url not in my_ephemeral_list_url %}
+										<form id="ajax-add-post" action="{% url 'ephemeral:home' %}" method="post">
+											{% csrf_token %}
+											<input type="hidden" id="ep_url" value="{{ ephemeral.ephemera_set.first.url }}" name="ep_url">
+											<input type="hidden" id="ep_message" value="{{ ephemeral.ephemera_set.first.message }}" name="ep_message">
+											<button type="submit" id="modalsubmit" class="btn btn-outline-primary">マイリストへ</button>
+										</form>
+									{% endif %}
+								{% else %}
+								  <a href="{% url 'accounts:sign_up' %}" class="btn btn-outline-primary">マイリストへ</a>
+								{% endif %}	
+							</div>
+						</div>
+					</div>
+					<div class="ephemera__main__item__detail__open"></div>
+				</div>
+			{% endfor %}
+			<div>
+				<ul class="pagination">
+				    <!-- 前へ の部分 -->
+				    {% if ephemeral_list.has_previous %}
+				        <li class="page-item">
+				        	{% if key_word == "" %}
+				            	<a class="page-link" href="?page={{ ephemeral_list.previous_page_number }}">
+			            	{% else %}
+				            	<a class="page-link" href="?word={{ key_word }}&page={{ ephemeral_list.previous_page_number }}">
+			            	{% endif %}
+			            		<span aria-hidden="true">&laquo;</span></a>
+				        </li>
+				    {% endif %}
+
+				    <!-- 数字の部分 -->
+				    {% for num in ephemeral_list.paginator.page_range %}
+				    	{% if num <= ephemeral_list.number|add:5 and num >= ephemeral_list.number|add:-5 %}
+					        {% if ephemeral_list.number == num %}
+					            <li class="page-item active">
+					            	<a class="page-link" href="#!">{{ num }}</a>
+					            </li>
+					        {% else %}
+					            <li class="page-item">
+					            	{% if key_word == "" %}
+					            		<a class="page-link" href="?page={{ num }}">{{ num }}</a>
+					            	{% else %}
+						            	<a class="page-link" href="?word={{ key_word }}&page={{ num }}">{{ num }}</a>
+					            	{% endif %}
+					            </li>
+					        {% endif %}
+					    {% endif %}
+				    {% endfor %}
+
+				    <!-- 次へ の部分 -->
+				    {% if ephemeral_list.has_next %}
+				        <li class="page-item">
+				        	{% if key_word == "" %}
+				            	<a class="page-link" href="?page={{ ephemeral_list.next_page_number }}">
+				            {% else %}
+				            	<a class="page-link" href="?word={{ key_word }}&page={{ ephemeral_list.next_page_number }}">
+				            {% endif %}
+				                <span aria-hidden="true">&raquo;</span></a>
+				        </li>
+				    {% endif %}
+				</ul>
+			</div>
+		</div>
+		<div class="ephemera__side">
+			<div class="ephemera__side__mylist">
+				<h2 class="ephemera__side__title">マイリスト</h2>
+				{% for my_ephemeral in my_ephemeral_list %}
+					<p class="ephemera__side__link"><a href="{{ my_ephemeral.url }}" target="_blank">{{ my_ephemeral.message }}</a></p>
+				{% endfor %}
+				{% if user.is_authenticated %}
+				<div class="ephemera__side__edit">
+					<p id="openModal" class="btn btn-primary">追加</p>
+					<a href="{% url 'ephemeral:mylist' %}"><p class="btn btn-outline-secondary">編集</p></a>
+				</div>
+				{% endif %}
+				<div>
+					<ul class="pagination" id="mylist__pagination">
+					    <!-- 前へ の部分 -->
+					    {% if my_ephemeral_list.has_previous %}
+					        <li class="page-item">
+					        	{% if key_word == "" %}
+					            	<a class="page-link" href="?my_list={{ my_ephemeral_list.previous_page_number }}">
+				            	{% else %}
+					            	<a class="page-link" href="?word={{ key_word }}&my_list={{ my_ephemeral_list.previous_page_number }}">
+				            	{% endif %}
+				            		<span aria-hidden="true">&laquo;</span></a>
+					        </li>
+					    {% endif %}
+
+					    <!-- 数字の部分 -->
+					    {% for num in my_ephemeral_list.paginator.page_range %}
+					    	{% if num <= my_ephemeral_list.number|add:1 and num >= my_ephemeral_list.number|add:-1 %}
+						        {% if my_ephemeral_list.number == num %}
+						            <li class="page-item active"><a class="page-link" href="#!">{{ num }}</a></li>
+						        {% else %}
+						            <li class="page-item"><a class="page-link" href="?{% if key_word == '' %}my_list={{ num }}{% else %}word={{ key_word }}&my_list={{ num }}{% endif %}">{{ num }}</a></li>
+						        {% endif %}
+						    {% endif %}
+					    {% endfor %}
+					    <!-- 次へ の部分 -->
+					    {% if my_ephemeral_list.has_next %}
+					        <li class="page-item">
+					            {% if key_word == "" %}
+					            	<a class="page-link" href="?my_list={{ my_ephemeral_list.xext_page_number }}">
+				            	{% else %}
+					            	<a class="page-link" href="?word={{ key_word }}&my_list={{ my_ephemeral_list.next_page_number }}">
+				            	{% endif %}
+				            		<span aria-hidden="true">&raquo;</span></a>
+					        </li>
+					    {% endif %}
+					</ul>
+				</div>
+				<div id="modalArea" class="modalArea">
+					<div id="modalBg" class="modalBg"></div>
+					<div id="modalWrapper" class="modalWrapper">
+						<form id="ajax-add-post" action="{% url 'ephemeral:home' %}" method="post">
+							{% csrf_token %}
+							<input type="text" id="ep_url" placeholder="https://" name="ep_url" required>
+							<input type="text" id="ep_message" placeholder="メモ" name="ep_message">
+							<button type="submit" id="modalsubmit" class="btn btn-primary">投稿</button>
+						</form>
+					</div>
+					<div id="confirmModal">
+						<div class="confirmmodalWrapper">
+							<p>投稿を取り消しますか？</p>
+							<div class="confirmModalbutton">
+								<div id="closeModal"><button class="btn btn-outline-primary">はい</button></div>
+								<div id="canselcloseModal"><button class="btn btn-outline-danger">いいえ</button></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ephemera__side__domain">
+				<h2 class="ephemera__side__title">人気ドメイン</h2>
+				{% for domain in popular_domain %}
+					<p class="ephemera__side__link">{{ forloop.counter }}. <a href="{{ domain.domain }}" target="_blank">{{ domain.domain }}</a></p>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+	
+
+{% endblock %}
+{% block extrajs %}
+	<script>
+		$(function () {
+			$('#openModal').click(function(){
+			$('#modalArea').fadeIn();
+			});
+			$('#modalBg').click(function(){
+			$('#confirmModal').fadeIn();
+			});
+			$('#closeModal').click(function(){
+				$('#confirmModal').fadeOut();
+			$('#modalArea').fadeOut();
+			});
+			$('#canselcloseModal').click(function(){
+				$('#confirmModal').fadeOut();
+			});
+			$('.ephemera__main__item').click(function() {
+				$(this).children(".ephemera__main__item__detail").slideToggle();
+				$(this).children(".ephemera__main__item__detail__open").toggleClass('close');;
+			})
+		});
+	</script>
+{% endblock %}

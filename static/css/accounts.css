@@ -1,0 +1,33 @@
+.btn-primary{
+	width: 100%;
+}
+
+/* mypage.html */
+
+.mypage__profile__detail{
+	padding-top: 20px;
+}
+
+.mypage__profile__detail h2{
+	margin: 0px 0px 40px 0px;
+}
+
+.mypage__profile__detail__ephemera__img{
+	height: 225px; 
+	width: 100%;
+	object-fit: cover;
+}
+
+.mypage__profile__detail .card-text,
+#mypage__profile__detail__ephemera__message > a,
+#mypage__profile__detail__ephemera__new > a{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#mypage__profile__detail__ephemera__message,
+#mypage__profile__detail__ephemera__new{
+	margin-top: 20px;
+}
+
+/* mypage.html */

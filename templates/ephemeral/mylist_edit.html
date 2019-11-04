@@ -1,0 +1,42 @@
+{% extends "ephemeral/base.html" %}
+{% block content %}
+{% load static %}
+	<div class="mylist_edit">
+		<form method="post" enctype="multipart/form-data">
+	    {% csrf_token %}
+
+	    {% include 'ephemeral/form.html' %}
+
+		<div class="mylist_edit__change">
+		    <button type="submit" value="Upload" class="btn btn-outline-primary">更新</button>
+		    <p class="btn btn-outline-danger" id="openModal">削除</p>
+		</div>
+	    </form>
+	    <div id="modalArea" class="modalArea">
+			<div id="modalBg" class="modalBg"></div>
+			<div id="modalWrapper" class="modalWrapper">
+				<p>本当に削除しますか？</p>
+				<div class="mylist_edit__delete__confirm">
+					<form method="post" action="{% url 'ephemeral:mylist_delete' pk=object.id  %}">
+				    	{% csrf_token %}
+						<button type="submit" value="削除" class="btn btn-outline-danger">削除</button>
+					</form>
+					<div id="canselcloseModal"><button class="btn btn-outline-primary">いいえ</button></div>
+				</div>
+			</div>
+		</div>
+	    
+	</div>
+{% endblock %}
+{% block extrajs %}
+	<script>
+		$(function () {
+			$('#openModal').click(function(){
+				$('#modalArea').fadeIn();
+			});
+			$('#canselcloseModal').click(function(){
+				$('#modalArea').fadeOut();
+			});
+		});
+	</script>
+{% endblock %}
